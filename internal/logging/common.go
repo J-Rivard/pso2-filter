@@ -43,6 +43,14 @@ func (l *Log) LogDebugAndError(params FormattedLog) {
 	l.LogDebug(params)
 }
 
+func (l *Log) LogFatal(params FormattedLog) {
+	fatal := l.logger.Fatal()
+	for k, v := range params {
+		fatal.Str(k, v)
+	}
+	fatal.Send()
+}
+
 func (l *Log) LogDebug(params FormattedLog) {
 	debug := l.logger.Debug()
 	for k, v := range params {

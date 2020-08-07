@@ -4,10 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"os"
+
+	"github.com/J-Rivard/pso2-filter/internal/clients/bot"
 )
 
 type Config struct {
-	BotToken string
+	BotParams *bot.Parameters
 }
 
 const (
@@ -20,7 +22,9 @@ func New() (*Config, error) {
 	}
 
 	return &Config{
-		BotToken: os.Getenv(token),
+		BotParams: &bot.Parameters{
+			Token: os.Getenv(token),
+		},
 	}, nil
 }
 

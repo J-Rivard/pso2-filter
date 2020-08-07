@@ -1,0 +1,53 @@
+package bot
+
+import (
+	"github.com/J-Rivard/pso2-filter/internal/logging"
+	"github.com/bwmarrin/discordgo"
+)
+
+type Bot struct {
+	Client *discordgo.Session
+	Log    *logging.Log
+}
+
+type Parameters struct {
+	Token string
+}
+
+func New(params *Parameters, log *logging.Log) (*Bot, error) {
+	dg, err := discordgo.New("Bot " + params.Token)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Bot{
+		Client: dg,
+		Log:    log,
+	}, nil
+}
+
+func (b *Bot) Start() error {
+	b.Client.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
+
+	err := b.Client.Open()
+	if err != nil {
+		return err
+	}
+
+	err = b.SetupHandlers(b.messageCreate, b.messageUpdate)
+
+	return err
+}
+
+func (b *Bot) Stop() error {
+	err := b.Client.Close()
+	return err
+}
+
+func (b *Bot) SetupHandlers(handlers ...interface{}) error {
+	for _, handler := range handlers {
+		b.Client.AddHandler(handler)
+	}
+
+	return nil
+}
