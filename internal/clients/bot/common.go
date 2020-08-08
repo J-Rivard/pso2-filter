@@ -16,6 +16,10 @@ type Parameters struct {
 	Token string
 }
 
+const (
+	BotAuthor = "Matoi-Chan"
+)
+
 func New(params *Parameters, database *db.DB, log *logging.Log) (*Bot, error) {
 	dg, err := discordgo.New("Bot " + params.Token)
 	if err != nil {

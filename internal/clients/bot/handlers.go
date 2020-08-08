@@ -22,23 +22,6 @@ func (b *Bot) messageCreate(session *discordgo.Session, msg *discordgo.MessageCr
 
 	b.handleCommand(msg)
 	b.handleEvent(session, msg)
-
-	var embeds *discordgo.MessageEmbed
-	if len(msg.Embeds) > 0 {
-		embeds = msg.Embeds[0]
-	}
-	newMsg := &discordgo.MessageSend{
-		Content: msg.Content,
-		Embed:   embeds,
-	}
-	session.ChannelMessageSendComplex(msg.ChannelID, newMsg)
-
-	for _, embed := range msg.Embeds {
-		b.Log.LogDebug(logging.FormattedLog{
-			"action":   "messageCreate",
-			"metadata": fmt.Sprintf("%s/%s/%s\n", embed.Author, embed.Title, embed.Description),
-		})
-	}
 }
 
 // This function will be called every time a

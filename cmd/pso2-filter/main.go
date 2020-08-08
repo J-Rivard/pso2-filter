@@ -28,13 +28,15 @@ func main() {
 		})
 	}
 
-	database, err := db.New(cfg.DBParams)
+	database, err := db.New(cfg.DBParams, logger)
 	if err != nil {
 		logger.LogFatal(logging.FormattedLog{
 			"action": "startup",
 			"error":  err.Error(),
 		})
 	}
+
+	go database.UpdateEvents()
 
 	bot, err := bot.New(cfg.BotParams, database, logger)
 	if err != nil {

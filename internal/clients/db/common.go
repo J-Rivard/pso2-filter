@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/J-Rivard/pso2-filter/internal/logging"
 	_ "github.com/lib/pq"
 )
 
@@ -16,10 +17,11 @@ type Parameters struct {
 
 type DB struct {
 	Client *sql.DB
-	Events []string
+	Events []*string
+	Log    *logging.Log
 }
 
-func New(params *Parameters) (*DB, error) {
+func New(params *Parameters, log *logging.Log) (*DB, error) {
 	connStr := fmt.Sprintf("user=%s password=%s host=%s search_path=%s sslmode=disable",
 		params.Username, params.Password, params.Host, params.Schema)
 
@@ -35,5 +37,6 @@ func New(params *Parameters) (*DB, error) {
 
 	return &DB{
 		Client: db,
+		Log:    log,
 	}, nil
 }

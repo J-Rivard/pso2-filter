@@ -35,9 +35,13 @@ func (b *Bot) handleCommand(msg *discordgo.MessageCreate) {
 }
 
 func (b *Bot) handleEvent(session *discordgo.Session, msg *discordgo.MessageCreate) {
+	if msg.Author.Username != BotAuthor {
+		return
+	}
+
 	for _, event := range b.Database.Events {
 		for _, embed := range msg.Embeds {
-			if strings.Contains(embed.Description, event) {
+			if strings.Contains(embed.Description, *event) {
 				newMsg := &discordgo.MessageSend{
 					Content: msg.Content,
 					Embed:   embed,
