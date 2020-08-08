@@ -1,28 +1,31 @@
 package bot
 
 import (
+	"github.com/J-Rivard/pso2-filter/internal/clients/db"
 	"github.com/J-Rivard/pso2-filter/internal/logging"
 	"github.com/bwmarrin/discordgo"
 )
 
 type Bot struct {
-	Client *discordgo.Session
-	Log    *logging.Log
+	Client   *discordgo.Session
+	Log      *logging.Log
+	Database *db.DB
 }
 
 type Parameters struct {
 	Token string
 }
 
-func New(params *Parameters, log *logging.Log) (*Bot, error) {
+func New(params *Parameters, database *db.DB, log *logging.Log) (*Bot, error) {
 	dg, err := discordgo.New("Bot " + params.Token)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Bot{
-		Client: dg,
-		Log:    log,
+		Client:   dg,
+		Log:      log,
+		Database: database,
 	}, nil
 }
 

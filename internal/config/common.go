@@ -5,15 +5,22 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/J-Rivard/pso2-filter/internal/clients/db"
+
 	"github.com/J-Rivard/pso2-filter/internal/clients/bot"
 )
 
 type Config struct {
 	BotParams *bot.Parameters
+	DBParams  *db.Parameters
 }
 
 const (
-	token = "BotToken"
+	token     = "BotToken"
+	db_pw     = "db_pw"
+	db_user   = "db_user"
+	db_host   = "db_host"
+	db_schema = "db_schema"
 )
 
 func New() (*Config, error) {
@@ -25,11 +32,17 @@ func New() (*Config, error) {
 		BotParams: &bot.Parameters{
 			Token: os.Getenv(token),
 		},
+		DBParams: &db.Parameters{
+			Host:     os.Getenv(db_host),
+			Username: os.Getenv(db_user),
+			Password: os.Getenv(db_pw),
+			Schema:   os.Getenv(db_schema),
+		},
 	}, nil
 }
 
 func validateEnvironment() error {
-	requiredEnvVars := []string{token}
+	requiredEnvVars := []string{token, db_user, db_pw, db_host, db_schema}
 
 	missingEnvVars := ""
 

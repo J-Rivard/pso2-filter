@@ -5,6 +5,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/J-Rivard/pso2-filter/internal/clients/db"
+
 	"github.com/J-Rivard/pso2-filter/internal/clients/bot"
 	"github.com/J-Rivard/pso2-filter/internal/config"
 	"github.com/J-Rivard/pso2-filter/internal/logging"
@@ -26,7 +28,15 @@ func main() {
 		})
 	}
 
-	bot, err := bot.New(cfg.BotParams, logger)
+	database, err := db.New(cfg.DBParams)
+	if err != nil {
+		logger.LogFatal(logging.FormattedLog{
+			"action": "startup",
+			"error":  err.Error(),
+		})
+	}
+
+	bot, err := bot.New(cfg.BotParams, database, logger)
 	if err != nil {
 		logger.LogFatal(logging.FormattedLog{
 			"action": "startup",

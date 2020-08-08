@@ -8,15 +8,20 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+const (
+	Prefix    = "$"
+	Subscribe = "SUBSCRIBE"
+)
+
 // This function will be called every time a new
 // message is created on any channel that the authenticated bot has access to.
 func (b *Bot) messageCreate(session *discordgo.Session, msg *discordgo.MessageCreate) {
-
-	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
 	if msg.Author.ID == session.State.User.ID {
 		return
 	}
+
+	b.handleCommand(msg)
+	b.handleEvent(session, msg)
 
 	var embeds *discordgo.MessageEmbed
 	if len(msg.Embeds) > 0 {
@@ -36,12 +41,12 @@ func (b *Bot) messageCreate(session *discordgo.Session, msg *discordgo.MessageCr
 	}
 }
 
+// This function will be called every time a
+// message is updated on any channel that the authenticated bot has access to.
 func (b *Bot) messageUpdate(session *discordgo.Session, msg *discordgo.MessageUpdate) {
 	if msg.Author == nil || msg.Author.ID == session.State.User.ID {
 		return
 	}
-
-	fmt.Println(msg.ChannelID)
 
 	for _, embed := range msg.Embeds {
 		for _, field := range embed.Fields {
