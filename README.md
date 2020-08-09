@@ -15,9 +15,13 @@ export db_user=postgres
 export db_pw=*
 export db_host=127.0.0.1
 export db_schema=*
+export db_name=*devdb*
 ```
 Be sure to fill in the * with relevant fields for your environment
 
 Once the appropriate environment variables are exported, simply run `go run cmd/pso2-filter/main.go`
+
+### Postgres
+You will also need postgres running, with the `pso2-filter.sql` file configuration ran.
 
 ## Usage

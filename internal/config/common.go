@@ -21,6 +21,7 @@ const (
 	db_user   = "db_user"
 	db_host   = "db_host"
 	db_schema = "db_schema"
+	db_name   = "db_name"
 )
 
 func New() (*Config, error) {
@@ -37,12 +38,13 @@ func New() (*Config, error) {
 			Username: os.Getenv(db_user),
 			Password: os.Getenv(db_pw),
 			Schema:   os.Getenv(db_schema),
+			DBName:   os.Getenv(db_name),
 		},
 	}, nil
 }
 
 func validateEnvironment() error {
-	requiredEnvVars := []string{token, db_user, db_pw, db_host, db_schema}
+	requiredEnvVars := []string{token, db_user, db_pw, db_host, db_schema, db_name}
 
 	missingEnvVars := ""
 

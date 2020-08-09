@@ -13,6 +13,7 @@ type Parameters struct {
 	Password string
 	Host     string
 	Schema   string
+	DBName   string
 }
 
 type DB struct {
@@ -22,8 +23,8 @@ type DB struct {
 }
 
 func New(params *Parameters, log *logging.Log) (*DB, error) {
-	connStr := fmt.Sprintf("user=%s password=%s host=%s search_path=%s sslmode=disable",
-		params.Username, params.Password, params.Host, params.Schema)
+	connStr := fmt.Sprintf("user=%s password=%s host=%s database=%s search_path=%s sslmode=disable",
+		params.Username, params.Password, params.Host, params.DBName, params.Schema)
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
