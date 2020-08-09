@@ -15,6 +15,10 @@ func (d *DB) UpdateEvents() {
 			"error":  err.Error(),
 		})
 	}
+	d.Log.LogDebug(logging.FormattedLog{
+		"action":   "db_update_events",
+		"metadata": fmt.Sprintf("Events fetched: %d", len(events)),
+	})
 	d.Events = events
 
 	for {
@@ -24,10 +28,16 @@ func (d *DB) UpdateEvents() {
 		case <-ticker.C:
 			events, err := d.FetchEvents()
 			if err != nil {
-				fmt.Println(err)
+				d.Log.LogDebug(logging.FormattedLog{
+					"action": "db_update_events",
+					"error":  err.Error(),
+				})
 				continue
 			}
-			fmt.Println(events)
+			d.Log.LogDebug(logging.FormattedLog{
+				"action":   "db_update_events",
+				"metadata": fmt.Sprintf("Events fetched: %d", len(events)),
+			})
 			d.Events = events
 		}
 	}

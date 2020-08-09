@@ -38,10 +38,18 @@ func (b *Bot) handleEvent(session *discordgo.Session, msg *discordgo.MessageCrea
 	if msg.Author.Username != BotAuthor {
 		return
 	}
+	fmt.Println(msg.Author.Username)
 
 	for _, event := range b.Database.Events {
 		for _, embed := range msg.Embeds {
-			if strings.Contains(embed.Description, *event) {
+			descUpper := strings.ToUpper(embed.Description)
+			titleUpper := strings.ToUpper(embed.Title)
+
+			eventUpper := strings.ToUpper(*event)
+
+			fmt.Println(descUpper, titleUpper, eventUpper)
+
+			if strings.Contains(descUpper, eventUpper) || strings.Contains(titleUpper, eventUpper) {
 				newMsg := &discordgo.MessageSend{
 					Content: msg.Content,
 					Embed:   embed,

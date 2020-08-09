@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	Prefix    = "$"
-	Subscribe = "SUBSCRIBE"
+	Prefix        = "$"
+	Subscribe     = "SUBSCRIBE"
+	ReadChannelId = "741095315968491604"
 )
 
 // This function will be called every time a new
@@ -20,8 +21,13 @@ func (b *Bot) messageCreate(session *discordgo.Session, msg *discordgo.MessageCr
 		return
 	}
 
+	// Handle commands from all channels
 	b.handleCommand(msg)
-	b.handleEvent(session, msg)
+
+	// If its the channel we're reading from
+	if msg.ChannelID == ReadChannelId {
+		b.handleEvent(session, msg)
+	}
 }
 
 // This function will be called every time a
